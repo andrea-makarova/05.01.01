@@ -11,7 +11,7 @@ const imgLink = "https://kea-alt-del.dk/t5/site/imgs/";
 const productlistLink = "http://kea-alt-del.dk/t5/api/productlist";
 const catLink = "http://kea-alt-del.dk/t5/api/categories";
 const productLink = "http://kea-alt-del.dk/t5/api/product?id=";
-const imageLink= "http://kea-alt-del.dk/t5/site/imgs?id=";
+
 
 all.addEventListener("click", () => showCategory("all"));
 
@@ -52,9 +52,49 @@ function showCategory(category) {
 
 function showDetails(data) {
     console.log(data);
-    //modal.querySelector(" .modal-image").src= imageLink + "medium/" + data.image + "-md.jpg";
+    modal.querySelector(" .modal-image").src = imgLink + "medium/" + data.image + "-md.jpg";
     modal.querySelector(" .modal-name").textContent = data.name;
-     modal.querySelector(" .modal-description").textContent = data.longdescription;
+    modal.querySelector(" .modal-description").textContent = data.longdescription;
+    if (data.discount !== 0) {
+        modal.querySelector(".modal-oldPrice").textContent = data.price + " kr";
+        modal.querySelector(".modal-price").textContent = data.price - data.discount + " kr";
+    } else {
+        modal.querySelector(".modal-price").textContent = data.price + " kr";
+
+    };
+    if (data.vegetarian == true) {
+        modal.querySelector(".modal-vegetarian").textContent = "🌱 Vegetarian";
+    };
+    if (data.soldout == true) {
+        modal.querySelector(" .modal-soldOut").textContent = "Sold out";
+        modal.querySelector(" .modal-image").style.opacity = "0.3";
+    }
+
+    modal.querySelector(" .modal-region").textContent = "From " + data.region + " region."
+
+
+    if (data.allergens.length > 0) {
+        modal.querySelector(" .modal-allergens").textContent = "Contains " + data.allergens + ".";
+    } else {
+        modal.querySelector(" .modal-allergens").style.display = "none";
+    };
+
+
+    if (data.stars == 1) {
+        modal.querySelector(" .modal-stars").textContent = "★";
+    };
+    if (data.stars == 2) {
+        modal.querySelector(" .modal-stars").textContent = "★★";
+    };
+    if (data.stars == 3) {
+        modal.querySelector(" .modal-stars").textContent = "★★★";
+    };
+    if (data.stars == 4) {
+        modal.querySelector(" .modal-stars").textContent = "★★★★";
+    };
+    if (data.stars == 5) {
+        modal.querySelector(" .modal-stars").textContent = "★★★★★";
+    };
     modal.classList.remove('hide');
 }
 
@@ -66,6 +106,9 @@ function showData(oneObject) {
     clone.querySelector("img").alt = oneObject.image;
     clone.querySelector("h2").textContent = oneObject.name;
     clone.querySelector("p").textContent = oneObject.shortdescription;
+    if (oneObject.category == "drinks") {
+        clone.querySelector("p.vegetarian").style.display = "none"
+    };
     if (oneObject.vegetarian == true) {
         clone.querySelector("p.vegetarian").textContent = "🌱 Vegetarian";
     };
